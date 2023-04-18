@@ -1,6 +1,6 @@
 import json
 
-apiKey = 'bae170ef64114272811713ac03aac058'
+APIKEY = 'bae170ef64114272811713ac03aac058'
 payload = {}
 headers = {}
 
@@ -13,34 +13,43 @@ with open("games-data.json", 'r') as datafile:
 
 games = []
 
+keys = list(gamesData.keys())
 results = data['results']
+newGameData = {}
 
-# { id, name, background-img, rating, price, genres, tags }
-for x in results:
-    gameId = x['id']
-    gameName = x['name']
-    gameBg = x['background_image']
-    gameRating = x['rating']
-    gamePrice = x['price']
-    gameGenres = x['genres']
-    gameTags = x['tags']
+# { id, name, background-img, background-img-additional, rating, price, genres, tags }
+for x in keys:
+    game = gamesData[x]
+    gameId = game['id']
+    gameName = game['name']
+    gameBg = game['background_image']
+    gameBgAd = game['background_image_additional']
+    gameRating = game['rating']
+    gameRatings = game['ratings']
+    gamePrice = game['price']
+    gameGenres = game['genres']
+    gameTags = game['tags']
+    gameDescription = game['description']
+    gameDescriptionRaw = game['description_raw']
     gameItem = {
         'id':  gameId,
         'name':  gameName,
         'background_image':  gameBg,
+        'background_image_additional': gameBgAd,
         'rating':  gameRating,
+        'ratings':  gameRatings,
         'price':  gamePrice,
         'genres':  gameGenres,
         'tags':  gameTags,
+        'description':  gameDescription,
+        'description_raw':  gameDescriptionRaw,
     }
-    games.append(gameItem)
+    newGameData[x] = gameItem
 
 gamesInfo = {'results': games}
 
-keys = list(gamesData.keys())
 
-
-with open('data.json', 'w') as gamesFile:
-    json.dump(gamesInfo, gamesFile, indent=4)
+with open('games-data.json', 'w') as gamesFile:
+    json.dump(newGameData, gamesFile, indent=4)
 
 print('operation complete')
